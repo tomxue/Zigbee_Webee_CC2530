@@ -28,3 +28,7 @@
 *.rar
 *.zip
 *.7z
+cscope.files
+cscope.out
+tags
+*.swp
