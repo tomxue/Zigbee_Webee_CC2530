@@ -22,7 +22,7 @@
   its documentation for any purpose.
 
   YOU FURTHER ACKNOWLEDGE AND AGREE THAT THE SOFTWARE AND DOCUMENTATION ARE
-  PROVIDED �AS IS� WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+  PROVIDED ?AS IS? WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED,
   INCLUDING WITHOUT LIMITATION, ANY WARRANTY OF MERCHANTABILITY, TITLE,
   NON-INFRINGEMENT AND FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT SHALL
   TEXAS INSTRUMENTS OR ITS LICENSORS BE LIABLE OR OBLIGATED UNDER CONTRACT,
@@ -71,6 +71,8 @@
 #include "hal_lcd.h"
 #include "hal_led.h"
 #include "hal_key.h"
+
+#include "MT_UART.h"
 
 /*********************************************************************
  * MACROS
@@ -176,6 +178,11 @@ void SampleApp_Init( uint8 task_id )
   SampleApp_NwkState = DEV_INIT;
   SampleApp_TransID = 0;
 
+  // UART initialization, added by tomxue
+  MT_UartInit();
+  MT_UartRegisterTaskID(task_id);
+  HalUARTWrite(0,"Hello World\n",12);
+
   // Device hardware initialization can be added here or in main() (Zmain.c).
   // If the hardware is application specific - add it here.
   // If the hardware is other parts of the device add it in main().
@@ -259,6 +266,7 @@ uint16 SampleApp_ProcessEvent( uint8 task_id, uint16 events )
       {
         // Received when a key is pressed
         case KEY_CHANGE:
+          HalUARTWrite(0,"KEY ",4);//串口提示 
           SampleApp_HandleKeys( ((keyChange_t *)MSGpkt)->state, ((keyChange_t *)MSGpkt)->keys );
           break;
 
@@ -366,6 +374,11 @@ void SampleApp_HandleKeys( uint8 shift, uint8 keys )
       // Add to the flash group
       aps_AddGroup( SAMPLEAPP_ENDPOINT, &SampleApp_Group );
     }
+  }
+  if ( keys & HAL_KEY_SW_6 )
+  {
+    HalUARTWrite(0,"K1 ",3);
+    HalLedBlink( HAL_LED_1, 2,50, 500 ); //LED1 闪烁提示 
   }
 }
 
