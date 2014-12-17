@@ -1,4 +1,16 @@
 Code examples:
+
     (1) light_switch: Webee book page 114~129, and switch between below codes for both ends.
         //appSwitch();      //节点为按键S1      P0_0
         appLight();         //节点为指示灯LED1   P1_0
+
+    (2) per_test: Webee book page 130~145, and switch between below codes for both ends.
+        //#define MODE_SEND   1
+
+        //看MODE_SEND，go to definition，找到定义的地方
+        //把那行代码注释掉就是接收部分，不注释就是发送
+        #ifdef MODE_SEND
+            appMode = MODE_TX;
+        #else
+            appMode = MODE_RX;
+        #endif  
