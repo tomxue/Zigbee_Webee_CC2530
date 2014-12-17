@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<workspace>
+  <project>
+    <path>$WS_DIR$\srf05_cc2530\iar\light_switch.ewp</path>
+  </project>
+  <project>
+    <path>$WS_DIR$\srf05_cc2530_91\iar\light_switch.ewp</path>
+  </project>
+  <project>
+    <path>$WS_DIR$\srf05_cc2530\iar\per_test.ewp</path>
+  </project>
+  <project>
+    <path>$WS_DIR$\srf05_cc2530_91\iar\per_test.ewp</path>
+  </project>
+  <project>
+    <path>$WS_DIR$\srf05_cc2530\iar\spectrum_analyzer.ewp</path>
+  </project>
+  <batchBuild>
+    <batchDefinition>
+      <name>All</name>
+      <member>
+        <project>light_switch</project>
+        <configuration>srf05_cc2530</configuration>
+      </member>
+      <member>
+        <project>light_switch</project>
+        <configuration>srf05_cc2530_91</configuration>
+      </member>
+      <member>
+        <project>per_test</project>
+        <configuration>srf05_cc2530</configuration>
+      </member>
+      <member>
+        <project>per_test</project>
+        <configuration>srf05_cc2530_91</configuration>
+      </member>
+      <member>
+        <project>spectrum_analyzer</project>
+        <configuration>srf05_cc2530</configuration>
+      </member>
+    </batchDefinition>
+  </batchBuild>
+</workspace>
+
+
