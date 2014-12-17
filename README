@@ -14,3 +14,7 @@ Code examples:
         #else
             appMode = MODE_RX;
         #endif  
+	
+	(3) SampleApp: UART print out of one kit
+		<1> Select CoordinatorEB in IAR
+		<2> Use IAR "Download and Debug", and then check the UART monitor's output
