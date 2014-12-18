@@ -22,7 +22,7 @@ Code examples:
 	(4) SampleApp: key press experiment, page 172~187, one kit is used
 		<1> Select CoordinatorEB in IAR
 		<2> Use IAR "Download and Debug", and then check the UART monitor's output
-		
+		<3> IAR settings change:
 		IAR -> Project -> Options -> Linker -> Extra Options:
 		-C $PROJ_DIR$\..\..\..\Libraries\TI2530DB\bin\Router-Pro.lib
 		-C $PROJ_DIR$\..\..\..\Libraries\TI2530DB\bin\Security.lib
@@ -33,3 +33,6 @@ Code examples:
 		-C C:\ti\ZStack-CC2530-2.5.1a\Projects\zstack\Libraries\TI2530DB\bin\Router-Pro.lib
 		-C C:\ti\ZStack-CC2530-2.5.1a\Projects\zstack\Libraries\TI2530DB\bin\Security.lib
 		-C C:\ti\ZStack-CC2530-2.5.1a\Projects\zstack\Libraries\TIMAC\bin\TIMAC-CC2530.lib
+
+		<4> The key is mapped to P0.4, and we should solder a flying wire on it, then touch the wire to GND to trigger the key event.
+		
