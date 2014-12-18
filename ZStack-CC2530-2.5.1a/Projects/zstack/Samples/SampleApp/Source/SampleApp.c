@@ -266,6 +266,7 @@ uint16 SampleApp_ProcessEvent( uint8 task_id, uint16 events )
       {
         // Received when a key is pressed
         case KEY_CHANGE:
+          HalUARTWrite(0,"KEY ",4);// added by tomxue
           SampleApp_HandleKeys( ((keyChange_t *)MSGpkt)->state, ((keyChange_t *)MSGpkt)->keys );
           break;
 
@@ -374,6 +375,11 @@ void SampleApp_HandleKeys( uint8 shift, uint8 keys )
       aps_AddGroup( SAMPLEAPP_ENDPOINT, &SampleApp_Group );
     }
   }
+  if ( keys & HAL_KEY_SW_6 ) 
+  { 
+    HalUARTWrite(0,"K1 ",3);             // by tomxue
+    HalLedBlink( HAL_LED_1, 2,50, 500 ); //LED1 blink, by tomxue
+  } 
 }
 
 /*********************************************************************

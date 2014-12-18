@@ -2068,9 +2068,9 @@
         </option>
         <option>
           <name>Linker Extra Options Edit</name>
-          <state>-C $PROJ_DIR$\..\..\..\Libraries\TI2530DB\bin\Router-Pro.lib</state>
-          <state>-C $PROJ_DIR$\..\..\..\Libraries\TI2530DB\bin\Security.lib</state>
-          <state>-C $PROJ_DIR$\..\..\..\Libraries\TIMAC\bin\TIMAC-CC2530.lib</state>
+          <state>-C C:\ti\ZStack-CC2530-2.5.1a\Projects\zstack\Libraries\TI2530DB\bin\Router-Pro.lib</state>
+          <state>-C C:\ti\ZStack-CC2530-2.5.1a\Projects\zstack\Libraries\TI2530DB\bin\Security.lib</state>
+          <state>-C C:\ti\ZStack-CC2530-2.5.1a\Projects\zstack\Libraries\TIMAC\bin\TIMAC-CC2530.lib</state>
         </option>
         <option>
           <name>CrcAlign</name>

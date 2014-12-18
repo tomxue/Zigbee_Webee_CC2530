@@ -15,6 +15,21 @@ Code examples:
             appMode = MODE_RX;
         #endif  
 	
-	(3) SampleApp: UART print out of one kit
+	(3) SampleApp: UART print out of one kit, page 159~171, one kit is used
 		<1> Select CoordinatorEB in IAR
 		<2> Use IAR "Download and Debug", and then check the UART monitor's output
+		
+	(4) SampleApp: key press experiment, page 172~187, one kit is used
+		<1> Select CoordinatorEB in IAR
+		<2> Use IAR "Download and Debug", and then check the UART monitor's output
+		
+		IAR -> Project -> Options -> Linker -> Extra Options:
+		-C $PROJ_DIR$\..\..\..\Libraries\TI2530DB\bin\Router-Pro.lib
+		-C $PROJ_DIR$\..\..\..\Libraries\TI2530DB\bin\Security.lib
+		-C $PROJ_DIR$\..\..\..\Libraries\TIMAC\bin\TIMAC-CC2530.lib
+		
+		should be changed to like this, and  then works.
+		
+		-C C:\ti\ZStack-CC2530-2.5.1a\Projects\zstack\Libraries\TI2530DB\bin\Router-Pro.lib
+		-C C:\ti\ZStack-CC2530-2.5.1a\Projects\zstack\Libraries\TI2530DB\bin\Security.lib
+		-C C:\ti\ZStack-CC2530-2.5.1a\Projects\zstack\Libraries\TIMAC\bin\TIMAC-CC2530.lib
