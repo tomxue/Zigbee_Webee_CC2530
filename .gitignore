@@ -33,3 +33,6 @@ cscope.files
 cscope.out
 tags
 *.swp
+*.wsdt
+*.dep
+*.pbd

@@ -404,6 +404,7 @@ void SampleApp_MessageMSGCB( afIncomingMSGPacket_t *pkt )
   switch ( pkt->clusterId )
   {
     case SAMPLEAPP_PERIODIC_CLUSTERID:
+      //HalUARTWrite(0,"I get data\n",11); 
       break;
 
     case SAMPLEAPP_FLASH_CLUSTERID:

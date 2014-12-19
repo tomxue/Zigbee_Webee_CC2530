@@ -1966,24 +1966,24 @@
         </option>
         <option>
           <name>AllowExtraOutput</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>GenerateExtraOutput</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>XExtraOutOverride</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>ExtraOutputFile</name>
-          <state>SampleApp.sim</state>
+          <state>SampleApp.hex</state>
         </option>
         <option>
           <name>ExtraOutputFormat</name>
           <version>11</version>
-          <state>60</state>
+          <state>23</state>
         </option>
         <option>
           <name>ExtraFormatVariant</name>
@@ -4083,24 +4083,24 @@
         </option>
         <option>
           <name>AllowExtraOutput</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>GenerateExtraOutput</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>XExtraOutOverride</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>ExtraOutputFile</name>
-          <state>SampleApp.sim</state>
+          <state>SampleApp.hex</state>
         </option>
         <option>
           <name>ExtraOutputFormat</name>
           <version>11</version>
-          <state>60</state>
+          <state>23</state>
         </option>
         <option>
           <name>ExtraFormatVariant</name>
@@ -4185,9 +4185,9 @@
         </option>
         <option>
           <name>Linker Extra Options Edit</name>
-          <state>-C $PROJ_DIR$\..\..\..\Libraries\TI2530DB\bin\EndDevice-Pro.lib</state>
-          <state>-C $PROJ_DIR$\..\..\..\Libraries\TI2530DB\bin\Security.lib</state>
-          <state>-C $PROJ_DIR$\..\..\..\Libraries\TIMAC\bin\TIMAC-CC2530.lib</state>
+          <state>-C C:\ti\ZStack-CC2530-2.5.1a\Projects\zstack\Libraries\TI2530DB\bin\Router-Pro.lib</state>
+          <state>-C C:\ti\ZStack-CC2530-2.5.1a\Projects\zstack\Libraries\TI2530DB\bin\Security.lib</state>
+          <state>-C C:\ti\ZStack-CC2530-2.5.1a\Projects\zstack\Libraries\TIMAC\bin\TIMAC-CC2530.lib</state>
         </option>
         <option>
           <name>CrcAlign</name>
