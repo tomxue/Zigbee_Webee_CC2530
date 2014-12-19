@@ -36,3 +36,7 @@ Code examples:
 
 		<4> The key is mapped to P0.4, and we should solder a flying wire on it, then touch the wire to GND to trigger the key event.
 		
+		<4> To generate hex(if not use above "Download and Debug" method), please refer to this link:
+			http://blog.csdn.net/liyvhg/article/details/6455403
+			And I have save it to my Wiznote.
+			

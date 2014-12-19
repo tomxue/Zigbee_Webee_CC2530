@@ -206,8 +206,8 @@
 //
 //
 // Include these two lines when generating a .hex file for banked code model:
-//-M(CODE)[(_CODEBANK_START+_FIRST_BANK_ADDR)-(_CODEBANK_END+_FIRST_BANK_ADDR)]*\
-//_NR_OF_BANKS+_FIRST_BANK_ADDR=0x8000
+-M(CODE)[(_CODEBANK_START+_FIRST_BANK_ADDR)-(_CODEBANK_END+_FIRST_BANK_ADDR)]*\
+_NR_OF_BANKS+_FIRST_BANK_ADDR=0x8000
 //
 //
 // Internal flash used for NV address space: reserving 6 pages.
