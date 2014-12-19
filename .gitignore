@@ -36,3 +36,6 @@ tags
 *.wsdt
 *.dep
 *.pbd
+*.tmp
+*.map
+*.d51
