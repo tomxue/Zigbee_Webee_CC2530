@@ -228,7 +228,7 @@ void main(void)
     basicRfConfig.channel = RF_CHANNEL;
     basicRfConfig.ackRequest = TRUE;
 #ifdef SECURITY_CCM
-    basicRfConfig.securityKey = key;
+    basicRfConfig.securityKey = key; 
 #endif
 
     // Initalise board peripherals
@@ -271,7 +271,7 @@ void main(void)
     **************************************/
     
     /************Select one and shield to another***********by boo*/
-    //appSwitch();        //节点为按键S1      P0_0
+    // appSwitch();        //节点为按键S1      P0_0
     appLight();         //节点为指示灯LED1   P1_0
     
    // Role is undefined. This code should not be reached

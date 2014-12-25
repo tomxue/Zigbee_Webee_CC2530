@@ -31,7 +31,6 @@
 #include "util_lcd.h"
 #include "basic_rf.h"
 #include "per_test.h"
-#include "string.h"
 
 /***********************************************************************************
 * CONSTANTS
@@ -56,38 +55,6 @@ static void appTimerISR(void);
 static void appStartStop(void);
 static void appTransmitter();
 static void appReceiver();
-void uartInit(void);//**************************
-void uartSend(int8 *Data,int len);//**********************
-//#define MODE_SEND   1
-
-/****************************************************************
-串口初始化函数
-****************************************************************/
-void uartInit(void)
-{ 
-    PERCFG = 0x00;              //位置1 P0口
-    P0SEL = 0x0c;              //P0_2,P0_3用作串口（外部设备功能）
-    P2DIR &= ~0XC0;          //P0优先作为UART0
-
-    U0CSR |= 0x80;              //设置为UART方式
-    U0GCR |= 11;                       
-    U0BAUD |= 216;              //波特率设为115200
-    UTX0IF = 0;               //UART0 TX中断标志初始置位0
-}
-
-/****************************************************************
-串口发送字符串函数            
-****************************************************************/
-void uartSend(int8 *Data,int len)
-{
-  int j;
-  for(j=0;j<len;j++)
-  {
-    U0DBUF = *Data++;
-    while(UTX0IF == 0);
-    UTX0IF = 0;
-  }
-}
 
 /***********************************************************************************
 * @fn          appTimerISR
@@ -158,145 +125,98 @@ static void appConfigTimer(uint16 rate)
 */
 static void appReceiver()
 {
-  uint32 segNumber=0;                              // 数据包序列号 
-  int16 perRssiBuf[RSSI_AVG_WINDOW_SIZE] = {0};    // 存储RSSI的环形缓冲区
-  uint8 perRssiBufCounter = 0;                     // 计数器用于RSSI缓冲区统计
- 
-  perRxStats_t rxStats = {0,0,0,0};      
-  int16 rssi;
-  uint8 resetStats=FALSE;
-  
-  int8 Myper[5];        
-  int8 Myrssi[2];
-  int8 Myreceive[4];
-  int32 temp_per;           //存放掉包率
-  int32 temp_receive;       //存放接收的包的个数
-  int32 temp_rssi;          //存放前32个rssi值的平均值
-  uartInit();               // 初始化串口
-  
+    uint32 segNumber=0;
+    int16 perRssiBuf[RSSI_AVG_WINDOW_SIZE] = {0};    // Ring buffer for RSSI
+    uint8 perRssiBufCounter = 0;                     // Counter to keep track of the
+    // oldest newest byte in RSSI
+    // ring buffer
+    perRxStats_t rxStats = {0,0,0,0};
+    int16 rssi;
+    uint8 resetStats=FALSE;
+
 #ifdef INCLUDE_PA
-  uint8 gain;
+    uint8 gain;
 
-  // Select gain (for modules with CC2590/91 only)
-  gain =appSelectGain();
-  halRfSetGain(gain);
+    // Select gain (for modules with CC2590/91 only)
+    gain =appSelectGain();
+    halRfSetGain(gain);
 #endif
-    
-   // Initialize BasicRF     初始化Basic RF 
-  basicRfConfig.myAddr = RX_ADDR;
-  if(basicRfInit(&basicRfConfig)==FAILED) 
-  {
-    HAL_ASSERT(FALSE);
-  }
-  //打开接收模块
-  basicRfReceiveOn();
 
-  /* 主循环 */
-  uartSend("PER_test: ",strlen("PER_test: ")); //串口发送数据
+    // Initialize BasicRF
+    basicRfConfig.myAddr = RX_ADDR;
+    if(basicRfInit(&basicRfConfig)==FAILED) {
+      HAL_ASSERT(FALSE);
+    }
+    basicRfReceiveOn();
+
+    halLcdClear();
+    halLcdWriteLines("PER Tester", "Receiver", "Ready");
+
     // Main loop
-  while (TRUE) 
-  {
-    while(!basicRfPacketIsReady());  // 等待新的数据包
-    //查看之后发行这里的rxPacket和发送里面的txPacket是同一种数据类型
-    //basicRfReceive（指向数据缓冲区的指针，缓冲区最大数据长度，这个包的rssi值）
-    //返回缓冲区实际数据长度
-    if(basicRfReceive((uint8*)&rxPacket, MAX_PAYLOAD_LENGTH, &rssi)>0) {
-         halLedSet(2);//*************P1_1 LED2点亮
+    while (TRUE) {
+        while(!basicRfPacketIsReady());
+        if(basicRfReceive((uint8*)&rxPacket, MAX_PAYLOAD_LENGTH, &rssi)>0) {
+            halLedSet(3);
+			
+	    // Change byte order from network to host order
+	    UINT32_NTOH(rxPacket.seqNumber);
+            segNumber = rxPacket.seqNumber;
             
-      UINT32_NTOH(rxPacket.seqNumber);  // 改变接收序号的字节顺序
-      segNumber = rxPacket.seqNumber;   //读取包的序号
-            
-      // If statistics is reset set expected sequence number to
-      // received sequence number 
-      //若统计被复位，设置期望收到的数据包序号为已经收到的数据包序号  
-      //怎么样被认为统计复位？在后面~
-      if(resetStats)
-      {
-        rxStats.expectedSeqNum = segNumber;
+            // If statistics is reset set expected sequence number to
+            // received sequence number
+            if(resetStats){
+              rxStats.expectedSeqNum = segNumber;
+              resetStats=FALSE;
+            }
         
-        resetStats=FALSE;
-      }  
-      
-      //下面这几行代码是用来计算上32个包的RSSI值的
-      //先预设一个32个长度的数组，用来存放RSSI值，一个指针，指示最旧的一个RSSI值
-      //每次获取新的包后，把最旧的RSSI值从总和处减去，再把新的RSSI值放入，并把它的值加入总和
-      // Subtract old RSSI value from sum
-      rxStats.rssiSum -= perRssiBuf[perRssiBufCounter];  // 从sum中减去旧的RSSI值
-      // Store new RSSI value in ring buffer, will add it to sum later
-      perRssiBuf[perRssiBufCounter] =  rssi;  // 存储新的RSSI值到环形缓冲区，之后它将被加入sum
-      rxStats.rssiSum += perRssiBuf[perRssiBufCounter];  // 增加新的RSSI值到sum
-      //如果指针超出数组最大值，复位指针
-      if(++perRssiBufCounter == RSSI_AVG_WINDOW_SIZE) {
-        perRssiBufCounter = 0;      
-      }
+            // Subtract old RSSI value from sum
+            rxStats.rssiSum -= perRssiBuf[perRssiBufCounter];
+            // Store new RSSI value in ring buffer, will add it to sum later
+            perRssiBuf[perRssiBufCounter] =  rssi;
 
-      
-      //检查接收到的数据包是否是所期望收到的数据包
-      // 是所期望收到的数据包
-      if(rxStats.expectedSeqNum == segNumber)   
-      {
-        rxStats.expectedSeqNum++;  
-      }
-      
-      // 不是所期望收到的数据包（大于期望收到的数据包的序号）
-      // 认为丢包
-      else if(rxStats.expectedSeqNum < segNumber)  
-      {                                            
-        rxStats.lostPkts += segNumber - rxStats.expectedSeqNum;
-        rxStats.expectedSeqNum = segNumber + 1;
-      }
-      
-      // (小于期望收到的数据包的序号）
-      //认为是一个新的测试开始，复位统计变量
-      else  
-      {              
-        rxStats.expectedSeqNum = segNumber + 1;
-        rxStats.rcvdPkts = 0;
-        rxStats.lostPkts = 0;
-      }
-      rxStats.rcvdPkts++;
-      
-      //以下代码都是用于串口输出计算值的
-      temp_receive=(int32)rxStats.rcvdPkts;
-       if(temp_receive>1000)
-      {
-       if(halButtonPushed()==HAL_BUTTON_1){
-       resetStats = TRUE;
-       rxStats.rcvdPkts = 1;
-       rxStats.lostPkts = 0;
+            // Add the new RSSI value to sum
+            rxStats.rssiSum += perRssiBuf[perRssiBufCounter];
+            if (++perRssiBufCounter == RSSI_AVG_WINDOW_SIZE) {
+                perRssiBufCounter = 0;      // Wrap ring buffer counter
+            }
+
+            // Check if received packet is the expected packet
+            if (rxStats.expectedSeqNum == segNumber) {
+                rxStats.expectedSeqNum++;
+            }
+            // If there is a jump in the sequence numbering this means some packets in
+            // between has been lost.
+            else if (rxStats.expectedSeqNum < segNumber){
+                rxStats.lostPkts += segNumber - rxStats.expectedSeqNum;
+                rxStats.expectedSeqNum = segNumber + 1;
+            }
+            // If the sequence number is lower than the previous one, we will assume a
+            // new data burst has started and we will reset our statistics variables.
+            else {
+                // Update our expectations assuming this is a new burst
+                rxStats.expectedSeqNum = segNumber + 1;
+                rxStats.rcvdPkts = 0;
+                rxStats.lostPkts = 0;
+            }
+            rxStats.rcvdPkts++;
+
+            // reset statistics if button 1 is pressed
+            if(halButtonPushed()==HAL_BUTTON_1){
+                resetStats = TRUE;
+                rxStats.rcvdPkts = 1;
+                rxStats.lostPkts = 0;
+            }
+            
+            // Update LCD
+            // PER in units per 1000
+            utilLcdDisplayValue(HAL_LCD_LINE_1, "PER: ", (int32)((rxStats.lostPkts*1000)/(rxStats.lostPkts+rxStats.rcvdPkts)), " /1000");
+            utilLcdDisplayValue(HAL_LCD_LINE_2, "RSSI: ", (int32)rxStats.rssiSum/32, "dBm");
+            #ifndef SRF04EB
+            utilLcdDisplayValue(HAL_LCD_LINE_3, "Recv'd: ", (int32)rxStats.rcvdPkts, NULL);
+            #endif
+            halLedClear(3);
         }
-      }
-
-      Myreceive[0]=temp_receive/100+'0';
-      Myreceive[1]=temp_receive%100/10+'0';
-      Myreceive[2]=temp_receive%10+'0';
-      Myreceive[3]='\0';
-      uartSend("RECE:",strlen("RECE:"));
-      uartSend(Myreceive,4);
-      uartSend("    ",strlen("    "));   
-      
-      temp_per = (int32)((rxStats.lostPkts*1000)/(rxStats.lostPkts+rxStats.rcvdPkts));
-      Myper[0]=temp_per/100+'0';
-      Myper[1]=temp_per%100/10+'0'; 
-      Myper[2]='.';
-      Myper[3]=temp_per%10+'0';
-      Myper[4]='%';
-      uartSend("PER:",strlen("PER:"));
-      uartSend(Myper,5);
-      uartSend("    ",strlen("    "));
-     
-      temp_rssi=(0-(int32)rxStats.rssiSum/32);
-      Myrssi[0]=temp_rssi/10+'0';
-      Myrssi[1]=temp_rssi%10+'0';
-      uartSend("RSSI:-",strlen("RSSI:-"));
-      uartSend(Myrssi,2);        
-      uartSend("\n",strlen("\n"));
-
-      halLedClear(2);
-
-      halMcuWaitMs(300);
-    }                    
-  }
+    }
 }
 
 
@@ -316,69 +236,90 @@ static void appReceiver()
 */
 static void appTransmitter()
 {
-  //声明变量
-  uint32 burstSize=0;     //设定进行一次测试所发送的数据包数量
-  uint32 pktsSent=0;      //指示当前已经发了多少个数据包
-  uint8 n;
+    uint32 burstSize=0;
+    uint32 pktsSent=0;
+    uint8 appTxPower;
+	uint8 n;
 
-  //初始化Basic RF
-  basicRfConfig.myAddr = TX_ADDR;
-  if(basicRfInit(&basicRfConfig)==FAILED) 
-  {
-    HAL_ASSERT(FALSE);
-  }
-
-  //置输出功率
-  halRfSetTxPower(2);
-
-  //设置进行一次测试所发送的数据包数量 
-  burstSize = 1000;
-
-  //关闭接收模块，省电
-  basicRfReceiveOff();
-
-  //配置定时器和IO
-  //暂时不知道有什么用...以后补上
-  appConfigTimer(0xC8);
-
-  //初始化数据包载荷
-  //txPacket是什么？ 就是一个数据包~在per_test.h中！
-  //里面有两个变量，seqNumber和padding[6]
-  //就是说一个数据包里面有6个字节的内容和一个表示序号的seqNumber
-  //讲一下seqNumber 就是拿来当序号用，发送时按012345这样的顺序发送，所以理应012345这样接受
-  //如果这次收到3，下次收到5，那就表示丢包了
-  txPacket.seqNumber = 0;
-  for(n = 0; n < sizeof(txPacket.padding); n++)  //初始化下，数据包里面就是012345
-  {
-    txPacket.padding[n] = n;
-  }
-
-  //主循环
-  while (TRUE) 
-  {
-    if (pktsSent < burstSize) //如果数据包还没有发送完，继续执行
-    {
-      // 改变发送序号的字节顺序
-      //我也不知道为什么要改变顺序再改回来，可能和数据发送的一些协议有关吧，以后知道再补上
-      UINT32_HTON(txPacket.seqNumber);
-      
-      //发送数据函数（发给谁， 发的内容， 数据长度） 重点就是这行代码！
-      //注意下，发送的就是txPacket这一整个数据，包括实际内容和序号，这是一个完整的数据包
-      basicRfSendPacket(RX_ADDR, (uint8*)&txPacket, PACKET_SIZE);
-
-      //在增加序号前将字节顺序改回为主机顺序
-      UINT32_NTOH(txPacket.seqNumber);
-      txPacket.seqNumber++; //发的序号+1 
-
-      pktsSent++;           //发送了一个数据包了 +1
-
-      halLedToggle(1);   //改变LED1的亮灭状态
-      halMcuWaitMs(500); //延时
+    // Initialize BasicRF
+    basicRfConfig.myAddr = TX_ADDR;
+    if(basicRfInit(&basicRfConfig)==FAILED) {
+      HAL_ASSERT(FALSE);
     }
-      //数据包清零
-     pktsSent = 0;
 
-  }
+    // Set TX output power
+    appTxPower = appSelectOutputPower();
+    halRfSetTxPower(appTxPower);
+
+    // Set burst size
+    burstSize = appSelectBurstSize();
+
+    // Basic RF puts on receiver before transmission of packet, and turns off
+    // after packet is sent
+    basicRfReceiveOff();
+
+    // Config timer and IO
+    n= appSelectRate();
+    appConfigTimer(n);
+    halJoystickInit();
+
+    // Initalise packet payload
+    txPacket.seqNumber = 0;
+    for(n = 0; n < sizeof(txPacket.padding); n++) {
+        txPacket.padding[n] = n;
+    }
+
+    halLcdClear();
+    halLcdWriteLines("PER Tester", "Joystick Push", "start/stop");
+
+    // Main loop
+    while (TRUE) {
+
+        // Wait for user to start application
+        while(!halJoystickPushed() );
+        appStartStop();
+
+        halLcdClear();
+        halLcdWriteLines("PER Tester", "Transmitter", NULL);
+
+        while(appStarted) {
+            if( halJoystickPushed() ) {
+                appStartStop();
+            }
+
+            if (pktsSent < burstSize) {
+                if( appState == TRANSMIT_PACKET ) {
+                    // Make sure sequence number has network byte order
+                    UINT32_HTON(txPacket.seqNumber);
+
+                    basicRfSendPacket(RX_ADDR, (uint8*)&txPacket, PACKET_SIZE);
+
+                    // Change byte order back to host order before increment
+                    UINT32_NTOH(txPacket.seqNumber);
+                    txPacket.seqNumber++;
+
+                    pktsSent++;
+                    #ifdef SRF04EB
+                    utilLcdDisplayValue(HAL_LCD_LINE_2, "Sent: ", (int32)pktsSent, NULL);
+                    #else
+                    utilLcdDisplayValue(HAL_LCD_LINE_3, "Sent: ", (int32)pktsSent, NULL);
+                    #endif
+                    appState = IDLE;
+
+                    halLedToggle(3);
+                }
+            }
+            else
+                appStarted = !appStarted;
+        }
+
+        // Reset statistics and sequence number
+        pktsSent = 0;
+        txPacket.seqNumber = 0;
+        halLcdClear();
+        halLedClear(3);
+        halLcdWriteLines("PER Test", "Joystick Push", "start/stop");
+    }
 }
 
 
@@ -396,38 +337,40 @@ static void appTransmitter()
 */
 void main (void)
 {
-    //变量声明
-    uint8 appMode;         //用来选择模式（发送或接收）
-    
+    uint8 appMode;
+
     appState = IDLE;
-    
-    //配置basic RF
+    appStarted = FALSE;
+	
+    // Config basicRF
     basicRfConfig.panId = PAN_ID;
     basicRfConfig.ackRequest = FALSE;
 
-    //初始化外围设备
+    // Initialise board peripherals
     halBoardInit();
 
-    //初始化hal_rf
+    // Initalise hal_rf
     if(halRfInit()==FAILED) {
       HAL_ASSERT(FALSE);
     }
-    
-    //点亮led1（P1.0）用以表示程序开始运行
+
+    // Indicate that device is powered
     halLedSet(1);
 
-    //信道设置 11—25都可以
-    basicRfConfig.channel = 0x0B;
+    // Print Logo and splash screen on LCD
+    utilPrintLogo("PER Tester");
 
-    //这里就是模式选择啦，选择完进入那个函数，然后main函数就不需要啦
-    //这个怎么选？？
-    //看MODE_SEND，go to definition，找到定义的地方
-    //把那行代码注释掉就是接收部分，不注释就是发送
-    #ifdef MODE_SEND
-     appMode = MODE_TX;
-    #else
-     appMode = MODE_RX;
-    #endif  
+    // Wait for user to press S1 to enter menu
+    while (halButtonPushed()!=HAL_BUTTON_1);
+    halMcuWaitMs(350);
+    halLcdClear();
+
+    // Set channel
+    basicRfConfig.channel = appSelectChannel();
+
+    // Set mode
+    appMode = appSelectMode();
+
     // Transmitter application
     if(appMode == MODE_TX) {
         // No return from here
@@ -460,7 +403,7 @@ void main (void)
   its documentation for any purpose.
 
   YOU FURTHER ACKNOWLEDGE AND AGREE THAT THE SOFTWARE AND DOCUMENTATION ARE
-  PROVIDED ?AS IS? WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+  PROVIDED �AS IS� WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED,
   INCLUDING WITHOUT LIMITATION, ANY WARRANTY OF MERCHANTABILITY, TITLE,
   NON-INFRINGEMENT AND FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT SHALL
   TEXAS INSTRUMENTS OR ITS LICENSORS BE LIABLE OR OBLIGATED UNDER CONTRACT,

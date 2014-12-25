@@ -12,7 +12,7 @@
           
           
           
-        <Column0>381</Column0><Column1>27</Column1><Column2>27</Column2><Column3>27</Column3></ColumnWidths>
+        <Column0>243</Column0><Column1>27</Column1><Column2>27</Column2><Column3>27</Column3></ColumnWidths>
       <PreferedWindows><Position>4</Position><ScreenPosX>3</ScreenPosX><ScreenPosY>95</ScreenPosY><Windows/></PreferedWindows></Workspace>
       <Build>
         
@@ -24,20 +24,20 @@
     <Windows>
       
       
-    <Wnd0><Tabs><Tab><Identity>TabID-8390-3716</Identity><TabName>Workspace</TabName><Factory>Workspace</Factory><Session><NodeDict><ExpandedNode>light_switch</ExpandedNode><ExpandedNode>light_switch/Output</ExpandedNode><ExpandedNode>light_switch/application</ExpandedNode><ExpandedNode>light_switch/basic rf</ExpandedNode><ExpandedNode>light_switch/hal</ExpandedNode><ExpandedNode>light_switch/hal/common</ExpandedNode></NodeDict></Session></Tab></Tabs><SelectedTab>0</SelectedTab></Wnd0><Wnd3><Tabs><Tab><Identity>TabID-26525-2587</Identity><TabName>Build</TabName><Factory>Build</Factory><Session/></Tab><Tab><Identity>TabID-22573-7971</Identity><TabName>Debug Log</TabName><Factory>Debug-Log</Factory><Session/></Tab></Tabs><SelectedTab>0</SelectedTab></Wnd3></Windows>
+    <Wnd1><Tabs><Tab><Identity>TabID-8390-3716</Identity><TabName>Workspace</TabName><Factory>Workspace</Factory><Session><NodeDict><ExpandedNode>light_switch</ExpandedNode><ExpandedNode>light_switch/Output</ExpandedNode><ExpandedNode>light_switch/application</ExpandedNode><ExpandedNode>light_switch/basic rf</ExpandedNode><ExpandedNode>light_switch/hal</ExpandedNode><ExpandedNode>light_switch/hal/common</ExpandedNode></NodeDict></Session></Tab></Tabs><SelectedTab>0</SelectedTab></Wnd1><Wnd2><Tabs><Tab><Identity>TabID-26525-2587</Identity><TabName>Build</TabName><Factory>Build</Factory><Session/></Tab><Tab><Identity>TabID-22573-7971</Identity><TabName>Debug Log</TabName><Factory>Debug-Log</Factory><Session/></Tab></Tabs><SelectedTab>0</SelectedTab></Wnd2></Windows>
     <Editor>
       
       
       
       
-    <Pane><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\source\apps\light_switch\light_switch.c</Filename><XPos>0</XPos><YPos>247</YPos><SelStart>7399</SelStart><SelEnd>7399</SelEnd></Tab><ActiveTab>0</ActiveTab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\source\Components\targets\srf05_soc\hal_digio.c</Filename><XPos>0</XPos><YPos>475</YPos><SelStart>12093</SelStart><SelEnd>12093</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\source\Components\targets\common\hal_lcd_srf05.c</Filename><XPos>0</XPos><YPos>586</YPos><SelStart>25923</SelStart><SelEnd>25923</SelEnd></Tab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
+    <Pane><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\source\apps\light_switch\light_switch.c</Filename><XPos>0</XPos><YPos>216</YPos><SelStart>6204</SelStart><SelEnd>6204</SelEnd></Tab><ActiveTab>0</ActiveTab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\source\Components\targets\srf05_soc\hal_digio.c</Filename><XPos>0</XPos><YPos>475</YPos><SelStart>12093</SelStart><SelEnd>12093</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>E:\&#x5B66;&#x4e60;\&#x7535;&#x5B50;\electron\zigbee\&#x751F;&#x4eA7;\&#x6D4B;&#x677F;&#x7A0B;&#x5e8F;\4.&#x65e0;&#x7eBF;&#x70B9;&#x706F;\source\apps\light_switch\light_switch.c</Filename><XPos>0</XPos><YPos>230</YPos><SelStart>6676</SelStart><SelEnd>6676</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\source\Components\targets\common\hal_lcd_srf05.c</Filename><XPos>0</XPos><YPos>586</YPos><SelStart>25923</SelStart><SelEnd>25923</SelEnd></Tab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
     <Positions>
       
       
       
       
       
-    <Top><Row0><Sizes><Toolbar-03430dc8><key>iaridepm.enu1</key></Toolbar-03430dc8></Sizes></Row0></Top><Left><Row0><Sizes><Wnd0><Rect><Top>-2</Top><Left>-2</Left><Bottom>677</Bottom><Right>455</Right><x>-2</x><y>-2</y><xscreen>291</xscreen><yscreen>303</yscreen><sizeHorzCX>156620</sizeHorzCX><sizeHorzCY>292189</sizeHorzCY><sizeVertCX>245963</sizeVertCX><sizeVertCY>654773</sizeVertCY></Rect></Wnd0></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd3><Rect><Top>-2</Top><Left>-2</Left><Bottom>315</Bottom><Right>1860</Right><x>-2</x><y>-2</y><xscreen>1862</xscreen><yscreen>317</yscreen><sizeHorzCX>1002153</sizeHorzCX><sizeHorzCY>305689</sizeHorzCY><sizeVertCX>166308</sizeVertCX><sizeVertCY>305689</sizeVertCY></Rect></Wnd3></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
+    <Top><Row0><Sizes><Toolbar-00b0a260><key>iaridepm.enu1</key></Toolbar-00b0a260></Sizes></Row0><Row1><Sizes/></Row1><Row2><Sizes/></Row2></Top><Left><Row0><Sizes><Wnd1><Rect><Top>-2</Top><Left>-2</Left><Bottom>414</Bottom><Right>334</Right><x>-2</x><y>-2</y><xscreen>214</xscreen><yscreen>192</yscreen><sizeHorzCX>156662</sizeHorzCX><sizeHorzCY>291793</sizeHorzCY><sizeVertCX>245974</sizeVertCX><sizeVertCY>632219</sizeVertCY></Rect></Wnd1></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd2><Rect><Top>-2</Top><Left>-2</Left><Bottom>199</Bottom><Right>1368</Right><x>-2</x><y>-2</y><xscreen>1370</xscreen><yscreen>201</yscreen><sizeHorzCX>1002928</sizeHorzCX><sizeHorzCY>305471</sizeHorzCY><sizeVertCX>166179</sizeVertCX><sizeVertCY>305471</sizeVertCY></Rect></Wnd2></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
   </Desktop>
 </Workspace>
 

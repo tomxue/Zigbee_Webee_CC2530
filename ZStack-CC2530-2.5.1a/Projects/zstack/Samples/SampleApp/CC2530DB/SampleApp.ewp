@@ -1335,7 +1335,7 @@
           <state>xMT_TASK</state>
           <state>xMT_SYS_FUNC</state>
           <state>xMT_ZDO_FUNC</state>
-          <state>xLCD_SUPPORTED=DEBUG</state>
+          <state>LCD_SUPPORTED=DEBUG</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -1966,7 +1966,7 @@
         </option>
         <option>
           <name>AllowExtraOutput</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>GenerateExtraOutput</name>
@@ -1974,16 +1974,16 @@
         </option>
         <option>
           <name>XExtraOutOverride</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>ExtraOutputFile</name>
-          <state>SampleApp.a51</state>
+          <state>SampleApp.sim</state>
         </option>
         <option>
           <name>ExtraOutputFormat</name>
           <version>11</version>
-          <state>23</state>
+          <state>60</state>
         </option>
         <option>
           <name>ExtraFormatVariant</name>
@@ -2068,9 +2068,9 @@
         </option>
         <option>
           <name>Linker Extra Options Edit</name>
-          <state>-C C:\ti\ZStack-CC2530-2.5.1a\Projects\zstack\Libraries\TI2530DB\bin\Router-Pro.lib</state>
-          <state>-C C:\ti\ZStack-CC2530-2.5.1a\Projects\zstack\Libraries\TI2530DB\bin\Security.lib</state>
-          <state>-C C:\ti\ZStack-CC2530-2.5.1a\Projects\zstack\Libraries\TIMAC\bin\TIMAC-CC2530.lib</state>
+          <state>-C $PROJ_DIR$\..\..\..\Libraries\TI2530DB\bin\Router-Pro.lib</state>
+          <state>-C $PROJ_DIR$\..\..\..\Libraries\TI2530DB\bin\Security.lib</state>
+          <state>-C $PROJ_DIR$\..\..\..\Libraries\TIMAC\bin\TIMAC-CC2530.lib</state>
         </option>
         <option>
           <name>CrcAlign</name>
@@ -3893,11 +3893,11 @@
         </option>
         <option>
           <name>XOutOverride</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>OutputFile</name>
-          <state>SampleApp.d51</state>
+          <state>SampleApp.hex</state>
         </option>
         <option>
           <name>OutputFormat</name>
@@ -4071,7 +4071,7 @@
         </option>
         <option>
           <name>DebugInformation</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>RuntimeControl</name>
@@ -4083,24 +4083,24 @@
         </option>
         <option>
           <name>AllowExtraOutput</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>GenerateExtraOutput</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>XExtraOutOverride</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>ExtraOutputFile</name>
-          <state>SampleApp.hex</state>
+          <state>SampleApp.sim</state>
         </option>
         <option>
           <name>ExtraOutputFormat</name>
           <version>11</version>
-          <state>23</state>
+          <state>60</state>
         </option>
         <option>
           <name>ExtraFormatVariant</name>
@@ -4185,9 +4185,9 @@
         </option>
         <option>
           <name>Linker Extra Options Edit</name>
-          <state>-C C:\ti\ZStack-CC2530-2.5.1a\Projects\zstack\Libraries\TI2530DB\bin\Router-Pro.lib</state>
-          <state>-C C:\ti\ZStack-CC2530-2.5.1a\Projects\zstack\Libraries\TI2530DB\bin\Security.lib</state>
-          <state>-C C:\ti\ZStack-CC2530-2.5.1a\Projects\zstack\Libraries\TIMAC\bin\TIMAC-CC2530.lib</state>
+          <state>-C $PROJ_DIR$\..\..\..\Libraries\TI2530DB\bin\EndDevice-Pro.lib</state>
+          <state>-C $PROJ_DIR$\..\..\..\Libraries\TI2530DB\bin\Security.lib</state>
+          <state>-C $PROJ_DIR$\..\..\..\Libraries\TIMAC\bin\TIMAC-CC2530.lib</state>
         </option>
         <option>
           <name>CrcAlign</name>

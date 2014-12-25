@@ -22,7 +22,7 @@
   its documentation for any purpose.
 
   YOU FURTHER ACKNOWLEDGE AND AGREE THAT THE SOFTWARE AND DOCUMENTATION ARE
-  PROVIDED ?AS IS? WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+  PROVIDED 揂S IS?WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED,
   INCLUDING WITHOUT LIMITATION, ANY WARRANTY OF MERCHANTABILITY, TITLE,
   NON-INFRINGEMENT AND FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT SHALL
   TEXAS INSTRUMENTS OR ITS LICENSORS BE LIABLE OR OBLIGATED UNDER CONTRACT,
@@ -72,7 +72,7 @@
 #include "hal_led.h"
 #include "hal_key.h"
 
-#include "MT_UART.h"
+#include  "MT_UART.h" //此处用于串口
 
 /*********************************************************************
  * MACROS
@@ -177,12 +177,11 @@ void SampleApp_Init( uint8 task_id )
   SampleApp_TaskID = task_id;
   SampleApp_NwkState = DEV_INIT;
   SampleApp_TransID = 0;
-
-  // UART initialization, added by tomxue
-  MT_UartInit();
-  MT_UartRegisterTaskID(task_id);
-  HalUARTWrite(0,"Hello World\n",12);
-
+  
+  MT_UartInit();//串口初始化
+  MT_UartRegisterTaskID(task_id);//登记任务号
+  HalUARTWrite(0,"Hello World\n",12); //（串口0，'字符'，字符个数。）
+  
   // Device hardware initialization can be added here or in main() (Zmain.c).
   // If the hardware is application specific - add it here.
   // If the hardware is other parts of the device add it in main().
@@ -266,7 +265,6 @@ uint16 SampleApp_ProcessEvent( uint8 task_id, uint16 events )
       {
         // Received when a key is pressed
         case KEY_CHANGE:
-          HalUARTWrite(0,"KEY ",4);// added by tomxue
           SampleApp_HandleKeys( ((keyChange_t *)MSGpkt)->state, ((keyChange_t *)MSGpkt)->keys );
           break;
 
@@ -313,7 +311,7 @@ uint16 SampleApp_ProcessEvent( uint8 task_id, uint16 events )
   if ( events & SAMPLEAPP_SEND_PERIODIC_MSG_EVT )
   {
     // Send the periodic message
-    SampleApp_SendPeriodicMessage();
+    SampleApp_SendPeriodicMessage();//周期性发送函数
 
     // Setup to send message again in normal period (+ a little jitter)
     osal_start_timerEx( SampleApp_TaskID, SAMPLEAPP_SEND_PERIODIC_MSG_EVT,
@@ -375,11 +373,6 @@ void SampleApp_HandleKeys( uint8 shift, uint8 keys )
       aps_AddGroup( SAMPLEAPP_ENDPOINT, &SampleApp_Group );
     }
   }
-  if ( keys & HAL_KEY_SW_6 ) 
-  { 
-    HalUARTWrite(0,"K1 ",3);             // by tomxue
-    HalLedBlink( HAL_LED_1, 2,50, 500 ); //LED1 blink, by tomxue
-  } 
 }
 
 /*********************************************************************
@@ -404,7 +397,9 @@ void SampleApp_MessageMSGCB( afIncomingMSGPacket_t *pkt )
   switch ( pkt->clusterId )
   {
     case SAMPLEAPP_PERIODIC_CLUSTERID:
-      //HalUARTWrite(0,"I get data\n",11); 
+      //HalUARTWrite(0,"I get data\n",11);//用于提示有数据
+      //HalUARTWrite(0, &pkt->cmd.Data[0],10); //打印收到数据
+      //HalUARTWrite(0,"\n",1);  //回车换行，便于观察
       break;
 
     case SAMPLEAPP_FLASH_CLUSTERID:
@@ -425,10 +420,11 @@ void SampleApp_MessageMSGCB( afIncomingMSGPacket_t *pkt )
  */
 void SampleApp_SendPeriodicMessage( void )
 {
+  uint8 data[10]={'0','1','2','3','4','5','6','7','8','9'};//自定义数据
   if ( AF_DataRequest( &SampleApp_Periodic_DstAddr, &SampleApp_epDesc,
                        SAMPLEAPP_PERIODIC_CLUSTERID,
-                       1,
-                       (uint8*)&SampleAppPeriodicCounter,
+                       10,//字节数
+                       data,//指针头
                        &SampleApp_TransID,
                        AF_DISCV_ROUTE,
                        AF_DEFAULT_RADIUS ) == afStatus_SUCCESS )

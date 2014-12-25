@@ -150,7 +150,7 @@
         </option>
         <option>
           <name>RTLibraryPath</name>
-          <state>$TOOLKIT_DIR$\LIB\CLIB\cl-pli-blxd-1e16x01.r51</state>
+          <state>$TOOLKIT_DIR$\LIB\CLIB\cl-pli-nlxd-1e16x01.r51</state>
         </option>
         <option>
           <name>Input variant</name>
@@ -767,7 +767,7 @@
         </option>
         <option>
           <name>XclFile</name>
-          <state>C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.0\8051\config\devices\Texas Instruments\lnk51ew_cc2530F256_banked.xcl</state>
+          <state>C:\Program Files\IAR Systems\Embedded Workbench 5.4\8051\config\lnk51ew_cc2530.xcl</state>
         </option>
         <option>
           <name>XclFileSlave</name>
